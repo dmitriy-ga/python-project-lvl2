@@ -17,7 +17,7 @@ def generate_diff(file1, file2):
         new_name = '- ' + i
         deletes[new_name] = deletes_wo_syms[i]
     del deletes_wo_syms
-    print(deletes)
+    # print(deletes)
 
     # Dictionary of added items
     adds_wo_syms = dict(dict2.items() - dict1.items())
@@ -26,10 +26,13 @@ def generate_diff(file1, file2):
         new_name = '+ ' + i
         adds[new_name] = adds_wo_syms[i]
     del adds_wo_syms
-    print(adds)
+    # print(adds)
 
     # Python dictionary with diffs
     diffs = OrderedDict(stays | deletes | adds)
     for name in sorted(diffs, key=lambda x: x.split()[-1]):
         diffs.move_to_end(name)
-    print(diffs)
+    # print(diffs)
+
+    new_json = json.dumps(diffs, indent=2)
+    print(new_json)
