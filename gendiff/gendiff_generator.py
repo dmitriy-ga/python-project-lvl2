@@ -8,7 +8,12 @@ def generate_diff(file1, file2):
     dict2 = json.load(open(file2))
 
     # Dictionary of untouched items
-    stays = dict(dict1.items() & dict2.items())
+    stays_wo_syms = dict(dict1.items() & dict2.items())
+    stays = {}
+    for i in stays_wo_syms.keys():
+        new_name = '  ' + i
+        stays[new_name] = stays_wo_syms[i]
+    del stays_wo_syms
 
     # Dictionary of deleted items
     deletes_wo_syms = dict(dict1.items() - dict2.items())
@@ -35,4 +40,5 @@ def generate_diff(file1, file2):
     # print(diffs)
 
     new_json = json.dumps(diffs, indent=2)
+    new_json = new_json.replace("\"", "")
     print(new_json)
