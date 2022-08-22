@@ -40,3 +40,4 @@ def generate_diff(file1, file2):
     new_json = json.dumps(diffs, indent=2)
     new_json = new_json.replace("\"", "")
     print(new_json)
+    return new_json
