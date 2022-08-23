@@ -2,34 +2,44 @@ from gendiff.gendiff_generator import generate_diff
 
 
 def test_flat_example():
-    file1 = 'gendiff/tests/fixtures/flat/file1.json'
-    file2 = 'gendiff/tests/fixtures/flat/file2.json'
+    file1_json = 'gendiff/tests/fixtures/flat/file1.json'
+    file2_json = 'gendiff/tests/fixtures/flat/file2.json'
+    file1_yaml = 'gendiff/tests/fixtures/flat/file1.yaml'
+    file2_yaml = 'gendiff/tests/fixtures/flat/file2.yaml'
     example = 'gendiff/tests/fixtures/flat/expect_example.txt'
 
     with open(example) as file:
         data_example = ''.join(line for line in file)
 
-    actual_example = generate_diff(file1, file2)
-    assert data_example == actual_example
+    for file1, file2 in ((file1_json, file2_json), (file1_yaml, file2_yaml)):
+        actual_example = generate_diff(file1, file2)
+        assert data_example == actual_example
 
 
 def test_flat_one_empty():
-    empty_file = 'gendiff/tests/fixtures/empty_file.json'
-    file1 = 'gendiff/tests/fixtures/flat/file1.json'
-    file2 = 'gendiff/tests/fixtures/flat/file2.json'
+    empty_json = 'gendiff/tests/fixtures/empty_file.json'
+    empty_yaml = 'gendiff/tests/fixtures/empty_file.yaml'
+    file1_json = 'gendiff/tests/fixtures/flat/file1.json'
+    file2_json = 'gendiff/tests/fixtures/flat/file2.json'
+    file1_yaml = 'gendiff/tests/fixtures/flat/file1.yaml'
+    file2_yaml = 'gendiff/tests/fixtures/flat/file2.yaml'
     expect_one_empty1 = 'gendiff/tests/fixtures/flat/expect_one_empty1.txt'
     expect_one_empty2 = 'gendiff/tests/fixtures/flat/expect_one_empty2.txt'
+    files_pairs1 = ((file1_json, empty_json), (file1_yaml, empty_yaml))
+    files_pairs2 = ((empty_json, file2_json), (empty_yaml, file2_yaml))
 
     with open(expect_one_empty1) as file:
         data_one_empty1 = ''.join(line for line in file)
     with open(expect_one_empty2) as file:
         data_one_empty2 = ''.join(line for line in file)
 
-    actual_one_empty1 = generate_diff(file1, empty_file)
-    assert data_one_empty1 == actual_one_empty1
+    for file1, empty_file in files_pairs1:
+        actual_one_empty1 = generate_diff(file1, empty_file)
+        assert data_one_empty1 == actual_one_empty1
 
-    actual_one_empty2 = generate_diff(empty_file, file2)
-    assert data_one_empty2 == actual_one_empty2
+    for empty_file, file2 in files_pairs2:
+        actual_one_empty2 = generate_diff(empty_file, file2)
+        assert data_one_empty2 == actual_one_empty2
 
 
 def test_flat_both_empty():
