@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import json
+import yaml
 
 
 def generate_diff(file1, file2):
@@ -14,9 +15,20 @@ def generate_diff(file1, file2):
         del dict_without_symbols
         return dict_with_symbols
 
+    def parsing_file(file):
+        """Detects filename extension and returns
+        converted opened file"""
+        filename_extension = file.split('.')[-1]
+        match filename_extension:
+            case 'json':
+                return json.load(open(file))
+            case 'yaml' | 'yml':
+                yaml_data = yaml.safe_load((open(file)))
+                return {} if yaml_data is None else yaml_data
+
     # Loading files to dictionaries
-    dict1 = json.load(open(file1))
-    dict2 = json.load(open(file2))
+    dict1 = parsing_file(file1)
+    dict2 = parsing_file(file2)
 
     # Dictionary of untouched items
     stays_without_symbols = dict(dict1.items() & dict2.items())
