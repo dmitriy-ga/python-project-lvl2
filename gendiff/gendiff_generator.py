@@ -5,16 +5,6 @@ import yaml
 
 def generate_diff(file1, file2):
 
-    def apply_change_symbols(dict_without_symbols, symbols):
-        """Creates new dictionary with text before keys,
-        when deletes old dictionary"""
-        dict_with_symbols = {}
-        for i in dict_without_symbols.keys():
-            new_name = symbols + i
-            dict_with_symbols[new_name] = dict_without_symbols[i]
-        del dict_without_symbols
-        return dict_with_symbols
-
     def parsing_file(file):
         """Detects filename extension and returns
         converted opened file"""
@@ -31,22 +21,26 @@ def generate_diff(file1, file2):
     dict2 = parsing_file(file2)
 
     # Dictionary of untouched items
-    stays_without_symbols = dict(dict1.items() & dict2.items())
-    stays = apply_change_symbols(stays_without_symbols, '  ')
+    stays = {f'  {key}': value
+             for key, value in dict1.items()
+             if value == dict2.get(key)}
 
     # Dictionary of deleted items
-    deletes_without_symbols = dict(dict1.items() - dict2.items())
-    deletes = apply_change_symbols(deletes_without_symbols, '- ')
+    deletes = {f'- {key}': value
+               for key, value in dict1.items()
+               if key not in dict2.keys()
+               or all((key in dict2.keys(), value != dict2.get(key)))}
 
     # Dictionary of added items
-    adds_without_symbols = dict(dict2.items() - dict1.items())
-    adds = apply_change_symbols(adds_without_symbols, '+ ')
+    adds = {f'+ {key}': value
+            for key, value in dict2.items()
+            if key not in dict1.keys()
+            or all((key in dict1.keys(), value != dict1.get(key)))}
 
     # Python dictionary with diffs
     diffs = OrderedDict(stays | deletes | adds)
     for name in sorted(diffs, key=lambda x: x.split()[-1]):
         diffs.move_to_end(name)
-    # print(diffs)
 
     # JSON output with diffs
     new_json = json.dumps(diffs, indent=2)
