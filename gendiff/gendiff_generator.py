@@ -1,6 +1,6 @@
 from collections import OrderedDict
-import json
 from gendiff.input_reader import parsing_file
+from gendiff.output_formatters import stylish
 
 
 def generate_diff(file1, file2):
@@ -59,8 +59,5 @@ def generate_diff(file1, file2):
 
     diffs = get_diffs(dict_old, dict_new)
 
-    # JSON output with diffs
-    new_json = json.dumps(diffs, indent=4, separators=('', ': '))
-    new_json = new_json.replace('"', '')
-    print(new_json)
-    return new_json
+    # Formatting and returning diffs
+    return stylish(diffs)
