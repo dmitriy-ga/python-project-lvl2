@@ -1,20 +1,9 @@
 from collections import OrderedDict
 import json
-import yaml
+from gendiff.input_reader import parsing_file
 
 
 def generate_diff(file1, file2):
-    def parsing_file(file):
-        """Detects filename extension and returns
-        converted opened file"""
-        filename_extension = file.split('.')[-1]
-        match filename_extension:
-            case 'json':
-                return json.load(open(file))
-            case 'yaml' | 'yml':
-                yaml_data = yaml.safe_load((open(file)))
-                return {} if yaml_data is None else yaml_data
-
     def is_dict(item):
         return isinstance(item, dict)
 
