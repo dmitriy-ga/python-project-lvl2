@@ -1,9 +1,9 @@
 from collections import OrderedDict
 from gendiff.input_reader import parsing_file
-from gendiff.output_formatters import stylish
+from gendiff.output_formatters import style_formatting
 
 
-def generate_diff(file1, file2):
+def generate_diff(file1, file2, style='stylish'):
     def is_dict(item):
         return isinstance(item, dict)
 
@@ -60,4 +60,4 @@ def generate_diff(file1, file2):
     diffs = get_diffs(dict_old, dict_new)
 
     # Formatting and returning diffs
-    return stylish(diffs)
+    return style_formatting(diffs, style)
