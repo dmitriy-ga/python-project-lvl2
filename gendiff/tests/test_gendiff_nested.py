@@ -1,8 +1,6 @@
 from gendiff.gendiff_generator import generate_diff
-import pytest
 
 
-@pytest.mark.skip(reason="Feature temporarily removed")
 def test_nested_example():
     file1_json = 'gendiff/tests/fixtures/nested/file1.json'
     file2_json = 'gendiff/tests/fixtures/nested/file2.json'
