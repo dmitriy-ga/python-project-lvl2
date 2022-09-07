@@ -29,7 +29,48 @@ def stylish(item):
     return styled_dict
 
 
+def plain(diffs, working_directory=''):
+
+    def convert_item_to_plain(item):
+        match item:
+            case None:
+                return 'null'
+            case bool() | int():
+                return str(item).lower()
+            case str():
+                return f"'{item}'"
+            case dict():
+                return '[complex value]'
+
+    result = []
+
+    for key, value in diffs.items():
+        path = f'{working_directory}.{key}' if working_directory else key
+        match value['action']:
+
+            case 'add':
+                added_value = convert_item_to_plain(diffs[key]["value"])
+                result.append(
+                    f"Property '{path}' was added with value: {added_value}")
+
+            case 'delete':
+                result.append(f"Property '{path}' was removed")
+
+            case 'change':
+                old_value = convert_item_to_plain(diffs[key]['old_value'])
+                new_value = convert_item_to_plain(diffs[key]['new_value'])
+                result.append(f"Property '{path}' was updated. "
+                              f"From {old_value} to {new_value}")
+
+            case 'nested':
+                result.append(plain(diffs[key]['value'], path))
+
+    return '\n'.join(result)
+
+
 def style_formatting(item, style='stylish'):
     match style:
         case 'stylish':
             return stylish(item)
+        case 'plain':
+            return plain(item)
