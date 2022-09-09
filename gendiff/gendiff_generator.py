@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from gendiff.input_reader import parsing_file
-from gendiff.output_formatters import style_formatting
+from gendiff.formatters.output_formatters import style_formatting
 
 
 def generate_diff(file1, file2, style='stylish'):
