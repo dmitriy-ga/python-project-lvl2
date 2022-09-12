@@ -31,6 +31,6 @@ def plain_format(diffs, working_directory=''):
                               f"From {old_value} to {new_value}")
 
             case 'nested':
-                result.append(plain_format(diffs[key]['value'], path))
+                result.append(plain_format(diffs[key]['children'], path))
 
     return '\n'.join(result)

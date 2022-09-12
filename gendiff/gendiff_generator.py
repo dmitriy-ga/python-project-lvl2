@@ -39,7 +39,7 @@ def generate_diff(file1, file2, style='stylish'):
 
         # Dictionary of nested values with same keys
         nested = {key: {'action': 'nested',
-                        'value': get_diffs(value, dict2.get(key))}
+                        'children': get_diffs(value, dict2.get(key))}
                   for key, value in dict1.items()
                   if all((is_dict(value),
                           is_dict(dict2.get(key)),

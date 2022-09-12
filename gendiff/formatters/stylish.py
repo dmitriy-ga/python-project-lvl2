@@ -18,7 +18,7 @@ def apply_stylish_symbols(diff_dict):
                 formatted_dict[f'+ {key}'] = diff_dict[key]['new_value']
             case 'nested':
                 formatted_dict[f'  {key}'] = \
-                    apply_stylish_symbols(diff_dict[key]['value'])
+                    apply_stylish_symbols(diff_dict[key]['children'])
 
     return formatted_dict
 
