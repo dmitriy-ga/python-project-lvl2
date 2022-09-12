@@ -1,8 +1,14 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.0"
-description = ""
+description = "CLI-tool for comparing two configuration files"
 authors = ["dmitriy-ga <Dmitriy2243@yandex.ru>"]
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+  "Environment :: Console",
+  "Topic :: Text Processing",
+  "Topic :: Utilities"
+]
 packages = [
   { include = "gendiff" },
 ]
