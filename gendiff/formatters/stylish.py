@@ -6,6 +6,7 @@ def apply_stylish_symbols(diff_dict):
     formatted_dict = OrderedDict()
 
     for key, value in diff_dict.items():
+
         match value['action']:
             case 'add':
                 formatted_dict[f'+ {key}'] = diff_dict[key]['value']
@@ -26,5 +27,6 @@ def apply_stylish_symbols(diff_dict):
 def stylish_format(diffs):
     styled_dict = json.dumps(apply_stylish_symbols(diffs),
                              indent=4, separators=('', ': '))
+
     styled_dict = styled_dict.replace('"', '')
     return styled_dict
