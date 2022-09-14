@@ -35,5 +35,5 @@ Implemented formatting output styles:
 
 Also tool can be imported and called by `generate_diff(first_file, second_file, style)`
 
-### Asciinema flat test demo:
-[![asciicast](https://asciinema.org/a/k6bhMDqVRkvt3x1lEWAsdLFKh.svg)](https://asciinema.org/a/k6bhMDqVRkvt3x1lEWAsdLFKh)
+### Asciinema demo:
+[![asciicast](https://asciinema.org/a/TQ2XR1wxid6bR4GeBzFx3gBKg.svg)](https://asciinema.org/a/TQ2XR1wxid6bR4GeBzFx3gBKg)
