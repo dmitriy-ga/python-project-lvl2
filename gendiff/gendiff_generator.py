@@ -7,10 +7,6 @@ PLAIN = 'plain'
 JSON = 'json'
 
 
-def is_dict(item):
-    return isinstance(item, dict)
-
-
 def get_diffs(dict1, dict2):
     result_diffs = OrderedDict()
     all_keys = set(dict1.keys() | set(dict2.keys()))
@@ -36,7 +32,7 @@ def get_diffs(dict1, dict2):
                                  'value': dict2[key]
                                  }
         # Nested items with same keys
-        elif is_dict(dict1[key]) and is_dict(dict2[key]):
+        elif isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
             children = get_diffs(dict1.get(key), dict2.get(key))
             result_diffs[key] = {'entry_type': 'nested',
                                  'children': children
