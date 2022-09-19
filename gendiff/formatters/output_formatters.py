@@ -3,7 +3,7 @@ from gendiff.formatters.stylish import stylish_format
 from gendiff.formatters.json import json_format
 
 
-def style_formatting(item, style='stylish'):
+def style_formatting(item, style):
     match style:
         case 'stylish':
             return stylish_format(item)

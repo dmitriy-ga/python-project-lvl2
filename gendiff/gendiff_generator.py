@@ -2,12 +2,16 @@ from collections import OrderedDict
 from gendiff.input_reader import parsing_file
 from gendiff.formatters.output_formatters import style_formatting
 
+STYLISH = 'stylish'
+PLAIN = 'plain'
+JSON = 'json'
+
 
 def is_dict(item):
     return isinstance(item, dict)
 
 
-def generate_diff(file1, file2, style='stylish'):
+def generate_diff(file1, file2, style=STYLISH):
 
     def get_diffs(dict1, dict2):
         # Dictionary of untouched items
