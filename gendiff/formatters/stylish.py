@@ -7,25 +7,25 @@ def body_stylish(diffs, level=1):
     indent = calculate_indent(level)
 
     for key, value in diffs.items():
-        match value['action']:
+        match value['entry_type']:
 
             case 'add':
                 result.append(build_entry(
-                    key, diffs[key]["value"], '+', level))
+                    key, diffs[key]['value'], '+', level))
 
             case 'delete':
                 result.append(build_entry(
-                    key, diffs[key]["value"], '-', level))
+                    key, diffs[key]['value'], '-', level))
 
             case 'change':
                 result.append(build_entry(
-                    key, diffs[key]["old_value"], '-', level))
+                    key, diffs[key]['old_value'], '-', level))
                 result.append(build_entry(
-                    key, diffs[key]["new_value"], '+', level))
+                    key, diffs[key]['new_value'], '+', level))
 
             case 'stay':
                 result.append(build_entry(
-                    key, diffs[key]["value"], ' ', level))
+                    key, diffs[key]['value'], ' ', level))
 
             case 'nested':
                 result.extend([f"{indent}{' '} {key}: {{",

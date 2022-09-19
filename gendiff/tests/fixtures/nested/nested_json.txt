@@ -1,53 +1,53 @@
 {
     "common": {
-        "action": "nested",
+        "entry_type": "nested",
         "children": {
             "follow": {
-                "action": "add",
+                "entry_type": "add",
                 "value": false
             },
             "setting1": {
-                "action": "stay",
+                "entry_type": "stay",
                 "value": "Value 1"
             },
             "setting2": {
-                "action": "delete",
+                "entry_type": "delete",
                 "value": 200
             },
             "setting3": {
-                "action": "change",
+                "entry_type": "change",
                 "old_value": true,
                 "new_value": null
             },
             "setting4": {
-                "action": "add",
+                "entry_type": "add",
                 "value": "blah blah"
             },
             "setting5": {
-                "action": "add",
+                "entry_type": "add",
                 "value": {
                     "key5": "value5"
                 }
             },
             "setting6": {
-                "action": "nested",
+                "entry_type": "nested",
                 "children": {
                     "doge": {
-                        "action": "nested",
+                        "entry_type": "nested",
                         "children": {
                             "wow": {
-                                "action": "change",
+                                "entry_type": "change",
                                 "old_value": "",
                                 "new_value": "so much"
                             }
                         }
                     },
                     "key": {
-                        "action": "stay",
+                        "entry_type": "stay",
                         "value": "value"
                     },
                     "ops": {
-                        "action": "add",
+                        "entry_type": "add",
                         "value": "vops"
                     }
                 }
@@ -55,19 +55,19 @@
         }
     },
     "group1": {
-        "action": "nested",
+        "entry_type": "nested",
         "children": {
             "baz": {
-                "action": "change",
+                "entry_type": "change",
                 "old_value": "bas",
                 "new_value": "bars"
             },
             "foo": {
-                "action": "stay",
+                "entry_type": "stay",
                 "value": "bar"
             },
             "nest": {
-                "action": "change",
+                "entry_type": "change",
                 "old_value": {
                     "key": "value"
                 },
@@ -76,7 +76,7 @@
         }
     },
     "group2": {
-        "action": "delete",
+        "entry_type": "delete",
         "value": {
             "abc": 12345,
             "deep": {
@@ -85,7 +85,7 @@
         }
     },
     "group3": {
-        "action": "add",
+        "entry_type": "add",
         "value": {
             "deep": {
                 "id": {

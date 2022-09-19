@@ -14,10 +14,10 @@ def plain_format(diffs, working_directory=''):
     result = []
     for key, value in diffs.items():
         path = f'{working_directory}.{key}' if working_directory else key
-        match value['action']:
+        match value['entry_type']:
 
             case 'add':
-                added_value = convert_item_to_plain(diffs[key]["value"])
+                added_value = convert_item_to_plain(diffs[key]['value'])
                 result.append(
                     f"Property '{path}' was added with value: {added_value}")
 
