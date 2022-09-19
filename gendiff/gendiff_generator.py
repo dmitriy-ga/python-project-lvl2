@@ -37,10 +37,9 @@ def get_diffs(dict1, dict2):
                                  }
         # Nested items with same keys
         elif is_dict(dict1[key]) and is_dict(dict2[key]):
+            children = get_diffs(dict1.get(key), dict2.get(key))
             result_diffs[key] = {'entry_type': 'nested',
-                                 'children': get_diffs(dict1.get(key),
-                                                       dict2.get(key)
-                                                       )
+                                 'children': children
                                  }
         # After all conditions expecting changed items only
         else:
