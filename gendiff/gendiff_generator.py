@@ -23,31 +23,31 @@ def get_diffs(dict1, dict2):
                 dict1.get(key) == dict2.get(key))):
 
             result_diffs[key] = {'entry_type': 'stay',
-                                 'value': dict1[key]}
-
+                                 'value': dict1[key]
+                                 }
         # Deleted items
-        elif (key in dict1
-              and key not in dict2):
+        elif key not in dict2:
             result_diffs[key] = {'entry_type': 'delete',
-                                 'value': dict1[key]}
-
+                                 'value': dict1[key]
+                                 }
         # Added items
-        elif (key not in dict1
-              and key in dict2):
+        elif key not in dict1:
             result_diffs[key] = {'entry_type': 'add',
-                                 'value': dict2[key]}
-
+                                 'value': dict2[key]
+                                 }
         # Nested items with same keys
         elif is_dict(dict1[key]) and is_dict(dict2[key]):
             result_diffs[key] = {'entry_type': 'nested',
                                  'children': get_diffs(dict1.get(key),
-                                                       dict2.get(key))}
-
+                                                       dict2.get(key)
+                                                       )
+                                 }
         # After all conditions expecting changed items only
         else:
             result_diffs[key] = {'entry_type': 'change',
                                  'old_value': dict1.get(key),
-                                 'new_value': dict2.get(key)}
+                                 'new_value': dict2.get(key)
+                                 }
 
     return result_diffs
 
