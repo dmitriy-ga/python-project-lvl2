@@ -11,55 +11,46 @@ def is_dict(item):
     return isinstance(item, dict)
 
 
+def get_diffs(dict1, dict2):
+    result_diffs = OrderedDict()
+    for key in sorted(set(dict1.keys() | set(dict2.keys()))):
+
+        # Untouched items
+        if all((key in dict1,
+                key in dict2,
+                dict1.get(key) == dict2.get(key))):
+
+            result_diffs[key] = {'entry_type': 'stay',
+                                 'value': dict1[key]}
+
+        # Deleted items
+        elif (key in dict1 and
+              key not in dict2):
+            result_diffs[key] = {'entry_type': 'delete',
+                                 'value': dict1[key]}
+
+        # Added items
+        elif (key not in dict1 and
+              key in dict2):
+            result_diffs[key] = {'entry_type': 'add',
+                                 'value': dict2[key]}
+
+        # Nested items with same keys
+        elif is_dict(dict1[key]) and is_dict(dict2[key]):
+            result_diffs[key] = {'entry_type': 'nested',
+                                 'children': get_diffs(dict1.get(key),
+                                                       dict2.get(key))}
+
+        # After all conditions expecting changed items only
+        else:
+            result_diffs[key] = {'entry_type': 'change',
+                                 'old_value': dict1.get(key),
+                                 'new_value': dict2.get(key)}
+
+    return result_diffs
+
+
 def generate_diff(file1, file2, style=STYLISH):
-
-    def get_diffs(dict1, dict2):
-        # Dictionary of untouched items
-        stays = {key: {'entry_type': 'stay', 'value': value}
-                 for key, value in dict1.items()
-                 if key in dict2
-                 and value == dict2.get(key)
-                 }
-
-        # Dictionary of deleted items
-        deletes = {key: {'entry_type': 'delete', 'value': value}
-                   for key, value in dict1.items()
-                   if key not in dict2
-                   }
-
-        # Dictionary of added items
-        adds = {key: {'entry_type': 'add', 'value': value}
-                for key, value in dict2.items()
-                if key not in dict1
-                }
-
-        # Dictionary of changed items
-        changes = {key: {'entry_type': 'change',
-                         'old_value': value, 'new_value': dict2.get(key)}
-                   for key, value in dict1.items()
-                   if all((key in dict2,
-                           value != dict2.get(key))
-                          )
-                   or is_dict(value) ^ is_dict(dict1.get(key))
-                   }
-
-        # Dictionary of nested values with same keys
-        nested = {key: {'entry_type': 'nested',
-                        'children': get_diffs(value, dict2.get(key))}
-                  for key, value in dict1.items()
-                  if all((is_dict(value),
-                          is_dict(dict2.get(key)),
-                          key in dict2,
-                          value != dict2.get(key))
-                         )
-                  }
-
-        # Building and sorting python dictionary
-        result_diffs = OrderedDict(stays | deletes | adds | changes | nested)
-        for name in sorted(result_diffs):
-            result_diffs.move_to_end(name)
-        return result_diffs
-
     # Loading files to dictionaries
     dict_old = parsing_file(file1)
     dict_new = parsing_file(file2)
