@@ -13,7 +13,9 @@ def is_dict(item):
 
 def get_diffs(dict1, dict2):
     result_diffs = OrderedDict()
-    for key in sorted(set(dict1.keys() | set(dict2.keys()))):
+    all_keys = set(dict1.keys() | set(dict2.keys()))
+
+    for key in sorted(all_keys):
 
         # Untouched items
         if all((key in dict1,
@@ -24,14 +26,14 @@ def get_diffs(dict1, dict2):
                                  'value': dict1[key]}
 
         # Deleted items
-        elif (key in dict1 and
-              key not in dict2):
+        elif (key in dict1
+              and key not in dict2):
             result_diffs[key] = {'entry_type': 'delete',
                                  'value': dict1[key]}
 
         # Added items
-        elif (key not in dict1 and
-              key in dict2):
+        elif (key not in dict1
+              and key in dict2):
             result_diffs[key] = {'entry_type': 'add',
                                  'value': dict2[key]}
 
