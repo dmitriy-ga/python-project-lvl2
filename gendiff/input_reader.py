@@ -1,22 +1,22 @@
 import json
 import yaml
+from gendiff import constants
 
 
-def parsing_file(file):
-    return parsing_data(*open_file(file))
+def parse_file(file):
+    opened_file = open(file)
+    file_content = opened_file.read()
+    filename_extension = file.split('.')[-1]
+    return convert_data_to_dict(file_content, filename_extension)
 
 
-def open_file(file):
-    """Returns inputted file and filename extension of it"""
-    return open(file), file.split('.')[-1]
-
-
-def parsing_data(data, filename_extension):
+def convert_data_to_dict(data, filename_extension):
     """Converts the input to python dictionary
     according to the filename extension"""
     match filename_extension:
-        case 'json':
-            return json.load(data)
-        case 'yaml' | 'yml':
+        case constants.JSON:
+            return json.loads(data)
+
+        case constants.YAML | constants.YML:
             yaml_data = yaml.safe_load(data)
             return {} if yaml_data is None else yaml_data

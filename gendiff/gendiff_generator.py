@@ -1,47 +1,48 @@
 from collections import OrderedDict
-from gendiff.input_reader import parsing_file
+from gendiff.input_reader import parse_file
 from gendiff.formatters.output_formatters import style_formatting
-
-STYLISH = 'stylish'
-PLAIN = 'plain'
-JSON = 'json'
+from gendiff.constants import STAY, DELETE, ADD, NESTED, CHANGE, STYLISH
 
 
-def get_diffs(dict1, dict2):
+def get_diffs(dictionary1, dictionary2):
     result_diffs = OrderedDict()
-    all_keys = set(dict1.keys() | set(dict2.keys()))
+    all_keys = set(dictionary1.keys() | set(dictionary2.keys()))
 
     for key in sorted(all_keys):
 
         # Untouched items
-        if all((key in dict1,
-                key in dict2,
-                dict1.get(key) == dict2.get(key))):
+        if all((key in dictionary1,
+                key in dictionary2,
+                dictionary1.get(key) == dictionary2.get(key))):
 
-            result_diffs[key] = {'entry_type': 'stay',
-                                 'value': dict1[key]
+            result_diffs[key] = {'entry_type': STAY,
+                                 'value': dictionary1[key]
                                  }
         # Deleted items
-        elif key not in dict2:
-            result_diffs[key] = {'entry_type': 'delete',
-                                 'value': dict1[key]
+        elif key not in dictionary2:
+            result_diffs[key] = {'entry_type': DELETE,
+                                 'value': dictionary1[key]
                                  }
         # Added items
-        elif key not in dict1:
-            result_diffs[key] = {'entry_type': 'add',
-                                 'value': dict2[key]
+        elif key not in dictionary1:
+            result_diffs[key] = {'entry_type': ADD,
+                                 'value': dictionary2[key]
                                  }
         # Nested items with same keys
-        elif isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
-            children = get_diffs(dict1.get(key), dict2.get(key))
-            result_diffs[key] = {'entry_type': 'nested',
+        elif all((isinstance(dictionary1[key], dict),
+                  isinstance(dictionary2[key], dict)
+                  )):
+
+            children = get_diffs(dictionary1.get(key),
+                                 dictionary2.get(key))
+            result_diffs[key] = {'entry_type': NESTED,
                                  'children': children
                                  }
         # After all conditions expecting changed items only
         else:
-            result_diffs[key] = {'entry_type': 'change',
-                                 'old_value': dict1.get(key),
-                                 'new_value': dict2.get(key)
+            result_diffs[key] = {'entry_type': CHANGE,
+                                 'old_value': dictionary1.get(key),
+                                 'new_value': dictionary2.get(key)
                                  }
 
     return result_diffs
@@ -49,10 +50,10 @@ def get_diffs(dict1, dict2):
 
 def generate_diff(file1, file2, style=STYLISH):
     # Loading files to dictionaries
-    dict_old = parsing_file(file1)
-    dict_new = parsing_file(file2)
+    first_dictionary = parse_file(file1)
+    second_dictionary = parse_file(file2)
 
-    diffs = get_diffs(dict_old, dict_new)
+    generated_diffs = get_diffs(first_dictionary, second_dictionary)
 
     # Formatting and returning diffs
-    return style_formatting(diffs, style)
+    return style_formatting(generated_diffs, style)
