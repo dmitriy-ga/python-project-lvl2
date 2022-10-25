@@ -1,36 +1,37 @@
-from gendiff import constants
+from gendiff import gendiff_generator
 
 INTEND_PER_LEVEL = 4
 SIGNS_LENGTH = 2
+NULL = 'null'
 
 
-def form_body_stylish(generated_diffs, level=1):
+def build_body_stylish(generated_diffs, level=1):
     changes_list = []
     indent = calculate_indent(level)
 
     for key, value in generated_diffs.items():
         match value['entry_type']:
 
-            case constants.ADD:
+            case gendiff_generator.ADD:
                 changes_list.append(build_entry(
                     key, generated_diffs[key]['value'], '+', level))
 
-            case constants.DELETE:
+            case gendiff_generator.DELETE:
                 changes_list.append(build_entry(
                     key, generated_diffs[key]['value'], '-', level))
 
-            case constants.CHANGE:
+            case gendiff_generator.CHANGE:
                 changes_list.append(build_entry(
                     key, generated_diffs[key]['old_value'], '-', level))
                 changes_list.append(build_entry(
                     key, generated_diffs[key]['new_value'], '+', level))
 
-            case constants.STAY:
+            case gendiff_generator.STAY:
                 changes_list.append(build_entry(
                     key, generated_diffs[key]['value'], ' ', level))
 
-            case constants.NESTED:
-                nested_entry_body = form_body_stylish(
+            case gendiff_generator.NESTED:
+                nested_entry_body = build_body_stylish(
                     generated_diffs[key]['children'], level + 1
                 )
                 changes_list.extend([f"{indent}{' '} {key}: {{",
@@ -47,7 +48,7 @@ def calculate_indent(level):
 def convert_item_to_stylish(item):
     match item:
         case None:
-            return constants.NULL
+            return NULL
 
         case bool():
             return str(item).lower()
@@ -79,5 +80,5 @@ def build_dict_entry(dict_value, level):
 
 
 def stylish_format(generated_diffs):
-    body_output = form_body_stylish(generated_diffs)
+    body_output = build_body_stylish(generated_diffs)
     return f"{{\n{body_output}\n}}" if body_output else '{}'

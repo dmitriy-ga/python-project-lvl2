@@ -1,7 +1,12 @@
 from collections import OrderedDict
 from gendiff.input_reader import parse_file
-from gendiff.formatters.output_formatters import style_formatting
-from gendiff.constants import STAY, DELETE, ADD, NESTED, CHANGE, STYLISH
+from gendiff.formatters.output_formatters import style_formatting, STYLISH
+
+STAY = 'stay'
+DELETE = 'delete'
+ADD = 'add'
+NESTED = 'nested'
+CHANGE = 'change'
 
 
 def get_diffs(dictionary1, dictionary2):

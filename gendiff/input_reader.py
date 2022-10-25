@@ -1,6 +1,9 @@
 import json
 import yaml
-from gendiff import constants
+
+JSON = 'json'
+YAML = 'yaml'
+YML = 'yml'
 
 
 def parse_file(file):
@@ -13,10 +16,10 @@ def parse_file(file):
 def convert_data_to_dict(data, filename_extension):
     """Converts the input to python dictionary
     according to the filename extension"""
-    match filename_extension:
-        case constants.JSON:
-            return json.loads(data)
+    if filename_extension == JSON:
+        json_data = json.loads(data)
+        return {} if json_data is None else json_data
 
-        case constants.YAML | constants.YML:
-            yaml_data = yaml.safe_load(data)
-            return {} if yaml_data is None else yaml_data
+    elif filename_extension == YAML or YML:
+        yaml_data = yaml.safe_load(data)
+        return {} if yaml_data is None else yaml_data

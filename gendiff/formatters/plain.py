@@ -1,10 +1,13 @@
-from gendiff import constants
+from gendiff import gendiff_generator
+
+NULL = 'null'
+COMPLEX_VALUE = '[complex value]'
 
 
 def convert_item_to_plain(item):
     match item:
         case None:
-            return constants.NULL
+            return NULL
 
         case bool() | int():
             return str(item).lower()
@@ -13,7 +16,7 @@ def convert_item_to_plain(item):
             return f"'{item}'"
 
         case dict():
-            return constants.COMPLEX_VALUE
+            return COMPLEX_VALUE
 
 
 def plain_format(generated_diffs, working_directory=''):
@@ -22,7 +25,7 @@ def plain_format(generated_diffs, working_directory=''):
         path = f'{working_directory}.{key}' if working_directory else key
         match value['entry_type']:
 
-            case constants.ADD:
+            case gendiff_generator.ADD:
                 added_value = convert_item_to_plain(
                     generated_diffs[key]['value']
                 )
@@ -30,10 +33,10 @@ def plain_format(generated_diffs, working_directory=''):
                     f"Property '{path}' was added with value: {added_value}"
                 )
 
-            case constants.DELETE:
+            case gendiff_generator.DELETE:
                 changes_list.append(f"Property '{path}' was removed")
 
-            case constants.CHANGE:
+            case gendiff_generator.CHANGE:
                 old_value = convert_item_to_plain(
                     generated_diffs[key]['old_value']
                 )
@@ -44,7 +47,7 @@ def plain_format(generated_diffs, working_directory=''):
                                     f"From {old_value} to {new_value}"
                                     )
 
-            case constants.NESTED:
+            case gendiff_generator.NESTED:
                 changes_list.append(
                     plain_format(generated_diffs[key]['children'], path)
                 )
