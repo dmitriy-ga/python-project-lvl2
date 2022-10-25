@@ -16,3 +16,6 @@ def style_formatting(item, style):
 
     elif style == JSON:
         return json_format(item)
+
+    else:
+        raise ValueError('Style format not found')

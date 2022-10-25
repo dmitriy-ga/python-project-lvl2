@@ -20,6 +20,9 @@ def convert_data_to_dict(data, filename_extension):
         json_data = json.loads(data)
         return {} if json_data is None else json_data
 
-    elif filename_extension == YAML or YML:
+    elif filename_extension in (YAML, YML):
         yaml_data = yaml.safe_load(data)
         return {} if yaml_data is None else yaml_data
+
+    else:
+        raise ValueError('Supported file format not found')

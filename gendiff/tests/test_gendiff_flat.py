@@ -1,11 +1,13 @@
 from gendiff.gendiff_generator import generate_diff
+import pytest
+
+file1_json = 'gendiff/tests/fixtures/flat/file1.json'
+file2_json = 'gendiff/tests/fixtures/flat/file2.json'
+file1_yaml = 'gendiff/tests/fixtures/flat/file1.yaml'
+file2_yaml = 'gendiff/tests/fixtures/flat/file2.yaml'
 
 
 def test_flat_example():
-    file1_json = 'gendiff/tests/fixtures/flat/file1.json'
-    file2_json = 'gendiff/tests/fixtures/flat/file2.json'
-    file1_yaml = 'gendiff/tests/fixtures/flat/file1.yaml'
-    file2_yaml = 'gendiff/tests/fixtures/flat/file2.yaml'
     example = 'gendiff/tests/fixtures/flat/expect_example.txt'
 
     with open(example) as file:
@@ -19,12 +21,10 @@ def test_flat_example():
 def test_flat_one_empty():
     empty_json = 'gendiff/tests/fixtures/empty_file.json'
     empty_yaml = 'gendiff/tests/fixtures/empty_file.yaml'
-    file1_json = 'gendiff/tests/fixtures/flat/file1.json'
-    file2_json = 'gendiff/tests/fixtures/flat/file2.json'
-    file1_yaml = 'gendiff/tests/fixtures/flat/file1.yaml'
-    file2_yaml = 'gendiff/tests/fixtures/flat/file2.yaml'
+
     expect_one_empty1 = 'gendiff/tests/fixtures/flat/expect_one_empty1.txt'
     expect_one_empty2 = 'gendiff/tests/fixtures/flat/expect_one_empty2.txt'
+
     files_pairs1 = ((file1_json, empty_json), (file1_yaml, empty_yaml))
     files_pairs2 = ((empty_json, file2_json), (empty_yaml, file2_yaml))
 
@@ -50,3 +50,21 @@ def test_flat_both_empty():
 
     actual_both_empty = generate_diff(empty_file, empty_file)
     assert data_both_empty == actual_both_empty
+
+
+def test_unsupported_format():
+    file_txt = 'gendiff/tests/fixtures/empty_file.txt'
+
+    with pytest.raises(ValueError) as unknown_format_error:
+        generate_diff(file_txt, file1_json)
+
+    assert unknown_format_error.type == ValueError
+    assert str(unknown_format_error.value) == 'Supported file format not found'
+
+
+def test_unsupported_style():
+    with pytest.raises(ValueError) as unknown_style_error:
+        generate_diff(file1_json, file2_json, 'gangnam')
+
+    assert unknown_style_error.type == ValueError
+    assert str(unknown_style_error.value) == 'Style format not found'

@@ -1,0 +1,2 @@
+This is text in txt file
+No useful data expected here
